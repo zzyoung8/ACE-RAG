@@ -1,101 +1,104 @@
-# 基于对比学习的RAG检索增强生成系统
+# Contrastive Learning based RAG Retrieval-Augmented Generation System in Spatio-Temporal Domain
 
-本项目实现了一个结合对比学习（Contrastive Learning）与检索增强生成（Retrieval-Augmented Generation, RAG）的问答系统，旨在提升文档检索与生成答案的准确性。系统支持中英文数据，具备数据采集、对比学习训练、向量检索、RAG生成与评测等完整流程。
+This project implements a question answering system that combines Contrastive Learning and Retrieval-Augmented Generation (RAG) to enhance the accuracy of document retrieval and answer generation. The system supports both Chinese and English data and includes a complete workflow encompassing data acquisition, contrastive learning training, vector retrieval, RAG generation, and evaluation.
 
-## 目录结构
+## Directory Structure
 
 ```
-.
-├── contrastive/              
-│   ├── main.py                 
-│   ├── model.py                
-│   ├── train.py                
-│   ├── retrieval.py            
-│   ├── README.md              
-│   └── ...                     
-├── data/                    
-├── model/                     
-├── results/                   
-├── RAG.py                     
-├── vector_retrieval.py         
-├── models.py                   
-├── utils.py                    
-├── get_data.py                 
-├── get_data_bbc.py             
-├── google_search.py            
-├── run_contrastive.sh         
-└── instruction.yaml            
+├── contrastive/
+│   ├── main.py
+│   ├── model.py
+│   ├── train.py
+│   ├── retrieval.py
+│   ├── README.md
+│   └── ...
+├── data/
+├── model/
+├── results/
+├── RAG.py
+├── vector_retrieval.py
+├── models.py
+├── utils.py
+├── get_data.py
+├── get_data_bbc.py
+├── google_search.py
+├── run_contrastive.sh
+└── instruction.yaml
 ```
 
-## 主要功能
+## Main Features
 
-- **数据采集与处理**：支持从新闻网站、谷歌搜索等多渠道采集中英文问答数据，并自动生成正负样本。
-- **对比学习训练**：通过对比学习方法训练检索模型，将query和文档编码到同一语义空间，提升相关性判别能力。
-- **向量检索与BM25检索**：支持基于SentenceTransformer的向量检索与BM25文本检索，适配中英文。
-- **RAG生成与评测**：集成多种大语言模型（如Qwen、ChatGLM、Baichuan等），支持多种Prompt模板，自动评测生成结果的准确率指标。
+  - **Data Acquisition and Processing**: Supports collecting Chinese and English question-answering data from various channels such as news websites and Google Search, and automatically generates positive and negative samples.
+  - **Contrastive Learning Training**: Trains a retrieval model using contrastive learning methods to encode queries and documents into the same semantic space, improving relevance discrimination.
+  - **Vector Retrieval and BM25 Retrieval**: Supports vector retrieval based on SentenceTransformer and BM25 text retrieval, adaptable for both Chinese and English.
+  - **RAG Generation and Evaluation**: Integrates various large language models (LLMs) such as Qwen, ChatGLM, Baichuan, etc., supports multiple Prompt templates, and automatically evaluates the accuracy metrics of generated results.
 
-## 安装依赖
+## Installation Dependencies
 
-请确保已安装以下主要依赖（部分依赖需根据实际模型和环境补充）：
+Please ensure the following main dependencies are installed (some dependencies may need to be added based on the specific models and environment):
 
-- Python 3.8+
-- torch
-- sentence-transformers
-- faiss
-- transformers
-- tqdm
-- spacy
-- jieba
-- nltk
-- requests
-- beautifulsoup4
-- pyyaml
+  - Python 3.8+
+  - torch
+  - sentence-transformers
+  - faiss
+  - transformers
+  - tqdm
+  - spacy
+  - jieba
+  - nltk
+  - requests
+  - beautifulsoup4
+  - pyyaml
 
-安装示例：
+Installation example:
 
 ```bash
 pip install torch sentence-transformers faiss-cpu transformers tqdm spacy jieba nltk requests beautifulsoup4 pyyaml
 python -m spacy download zh_core_web_sm
 ```
 
-## 快速开始
+## Quick Start
 
-### 1. 数据采集与处理
+### 1\. Data Acquisition and Processing
 
-- 运行 `get_data.py` 或 `get_data_bbc.py` 可自动爬取新闻网页并生成问答数据。
-- 可用 `utils.py` 进行正负样本划分、格式转换等数据预处理。
+  - Run `get_data.py` or `get_data_bbc.py` to automatically crawl news web pages and generate question-answering data.
+  - Use `utils.py` for data preprocessing such as positive and negative sample splitting and format conversion.
 
-### 2. 对比学习训练与检索
+### 2\. Contrastive Learning Training and Retrieval
 
-- 训练对比学习模型：
-  ```bash
-  python contrastive/main.py --train --data_path data/zh.json
-  ```
-- 用训练好的模型进行检索：
-  ```bash
-  python contrastive/main.py --retrieve --data_path data/zh.json
-  ```
+  - Train the contrastive learning model:
 
-### 3. RAG生成与评测
+    ```bash
+    python contrastive/main.py --train --data_path data/zh.json
+    ```
 
-- 评测检索增强生成效果：
-  ```bash
-  python contrastive/main.py --evaluate --dataset zh --modelname Qwen2.5 --method TA_ARE
-  ```
+  - Perform retrieval using the trained model:
 
-### 4. 其他脚本
+    ```bash
+    python contrastive/main.py --retrieve --data_path data/zh.json
+    ```
 
-- `vector_retrieval.py`：独立的向量检索与BM25检索实现，可用于检索算法对比实验。
-- `RAG.py`：支持多种大模型的RAG主流程与评测脚本，参数详见脚本内说明。
+### 3\. RAG Generation and Evaluation
 
-## 参数说明
+  - Evaluate the performance of retrieval-augmented generation:
 
-主要参数如下，更多参数及默认值详见 `contrastive/README.md` 或各脚本内帮助信息：
+    ```bash
+    python contrastive/main.py --evaluate --dataset zh --modelname Qwen2.5 --method TA_ARE
+    ```
 
-- `--train` / `--retrieve` / `--evaluate`：控制流程阶段
-- `--data_path`：数据文件路径
-- `--dataset`：评测用数据集名
-- `--base_model`：句向量基模型路径
-- `--modelname`：评测用大模型名称
-- `--method`：评测方法（Prompt模板）
-- `--output_dir` / `--model_dir`：输出与模型保存目录
+### 4\. Other Scripts
+
+  - `vector_retrieval.py`: Independent implementation of vector retrieval and BM25 retrieval, which can be used for comparative experiments of retrieval algorithms.
+  - `RAG.py`: RAG main process and evaluation script supporting various large models. See the script for detailed parameter descriptions.
+
+## Parameter Description
+
+The main parameters are as follows. For more parameters and default values, please refer to `contrastive/README.md` or the help information within each script:
+
+  - `--train` / `--retrieve` / `--evaluate`: Controls the workflow stage
+  - `--data_path`: Path to the data file
+  - `--dataset`: Name of the evaluation dataset
+  - `--base_model`: Path to the sentence embedding base model
+  - `--modelname`: Name of the large model used for evaluation
+  - `--method`: Evaluation method (Prompt template)
+  - `--output_dir` / `--model_dir`: Output and model saving directories
