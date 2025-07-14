@@ -1,4 +1,4 @@
-# Contrastive Learning based RAG Retrieval-Augmented Generation System in Spatio-Temporal Domain
+# ACE-RAG: Automated Context Engineering with Spatio-Temporal and Contrastive Optimization for Retrieval-Augmented Generation
 
 This project implements a question answering system that combines Contrastive Learning and Retrieval-Augmented Generation (RAG) to enhance the accuracy of document retrieval and answer generation. The system supports both Chinese and English data and includes a complete workflow encompassing data acquisition, contrastive learning training, vector retrieval, RAG generation, and evaluation.
 
@@ -12,9 +12,6 @@ This project implements a question answering system that combines Contrastive Le
 │   ├── retrieval.py
 │   ├── README.md
 │   └── ...
-├── data/
-├── model/
-├── results/
 ├── RAG.py
 ├── vector_retrieval.py
 ├── models.py

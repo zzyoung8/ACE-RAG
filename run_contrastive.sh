@@ -13,7 +13,7 @@ MODE=${2:-"full"}
 mkdir -p contrastive/saved_models
 mkdir -p contrastive/output
 
-# Base command - 显式指定方法为zzy
+# Base command
 BASE_CMD="python contrastive/main.py --data_path data/${DATASET}.json --dataset ${DATASET} --method zzy"
 
 # Run appropriate mode
